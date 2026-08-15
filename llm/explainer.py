@@ -144,8 +144,8 @@ Informations du dataset:
 """
             if 'target' in data_summary:
                 prompt += f"- Colonne cible: {data_summary['target']['column']} (type: {data_summary['target']['type']}, valeurs uniques: {data_summary['target']['unique_count']})\n"
-                if not data_summary['target'].get('is_balanced'):
-                    prompt += "- ⚠️ Le dataset est déséquilibré\n"
+            if not data_summary['target'].get('is_balanced'):
+                prompt += "- Le dataset est desequilibre\n"
             
             prompt += "\nGénère une explication claire et structurée en markdown."
             
@@ -175,7 +175,7 @@ Informations du dataset:
             summary += f"- Type détecté : {target['type']}\n"
             summary += f"- Nombre de classes/valeurs uniques : {target['unique_count']}\n"
             if not target['is_balanced']:
-                summary += "⚠️ **Attention** : Le dataset est déséquilibré\n"
+                summary += "Attention : Le dataset est desequilibre\n"
         
         return summary
     
@@ -259,14 +259,14 @@ Génère une explication claire, structurée en markdown, qui explique pourquoi 
         
         # Informations sur overfitting/underfitting
         if evaluation.get('overfitting', {}).get('detected'):
-            explanation += "⚠️ **Overfitting détecté** : Le modèle performe bien sur les données d'entraînement mais moins bien sur les données de test.\n"
+            explanation += "Overfitting detecte : Le modele performe bien sur les donnees d'entrainement mais moins bien sur les donnees de test.\n"
             explanation += "   - Score train : {:.4f}\n".format(evaluation['overfitting']['train_score'])
             explanation += "   - Score test : {:.4f}\n".format(evaluation['overfitting']['test_score'])
-            explanation += "   - Écart : {:.4f}\n\n".format(evaluation['overfitting']['gap'])
+            explanation += "   - Ecart : {:.4f}\n\n".format(evaluation['overfitting']['gap'])
         
         if evaluation.get('underfitting', {}).get('detected'):
-            explanation += "⚠️ **Underfitting détecté** : Le modèle ne performe pas bien sur les données d'entraînement et de test.\n"
-            explanation += "   Cela suggère que le modèle est trop simple pour capturer les patterns dans les données.\n\n"
+            explanation += "Underfitting detecte : Le modele ne performe pas bien sur les donnees d'entrainement et de test.\n"
+            explanation += "   Cela suggere que le modele est trop simple pour capturer les patterns dans les donnees.\n\n"
         
         # Métriques détaillées
         test_metrics = evaluation.get('test_metrics', {})

@@ -55,10 +55,10 @@ except ImportError:
     cfg = DefaultConfig()
 
 CHATBOT_NAME = getattr(cfg, 'CHATBOT_NAME', "ChatAutoML-Bot")
-CHATBOT_ICON = getattr(cfg, 'CHATBOT_ICON', '🤖')
+CHATBOT_ICON = getattr(cfg, 'CHATBOT_ICON', None)
 CHATBOT_DESCRIPTION = getattr(cfg, 'CHATBOT_DESCRIPTION', 'Votre assistant AutoML pour données tabulaires.')
 
-st.set_page_config(page_title=CHATBOT_NAME, page_icon=CHATBOT_ICON, layout="wide")
+st.set_page_config(page_title=CHATBOT_NAME, page_icon=CHATBOT_ICON or "", layout="wide")
 
 # --- Initialisation de la session ---
 def initialize_session():
@@ -195,7 +195,7 @@ def _handle_pending_chat_action(user_text: str) -> bool:
     if pending == 'confirm_reset_session':
         if t in {'oui', 'yes', 'y', 'ok', "d'accord", "daccord"}:
             initialize_session()
-            add_message("assistant", "✅ Session réinitialisée. Vous pouvez recharger un dataset.")
+            add_message("assistant", "Session reinitialisee. Vous pouvez recharger un dataset.")
             st.session_state.pending_chat_action = None
             return True
         if t in {'non', 'no', 'n'}:
@@ -207,12 +207,12 @@ def _handle_pending_chat_action(user_text: str) -> bool:
     if pending == 'choose_reset_scope':
         if t in {'a', 'option a'}:
             _reset_pipeline_state(keep_messages=True)
-            add_message("assistant", "✅ OK. J'ai réinitialisé le pipeline. Le dataset est conservé.")
+            add_message("assistant", "OK. J'ai reinitialise le pipeline. Le dataset est conserve.")
             st.session_state.pending_chat_action = None
             return True
         if t in {'b', 'option b'}:
             initialize_session()
-            add_message("assistant", "✅ OK. J'ai tout réinitialisé (dataset + cible + résultats + chat).")
+            add_message("assistant", "OK. J'ai tout reinitialise (dataset + cible + resultats + chat).")
             st.session_state.pending_chat_action = None
             return True
         add_message("assistant", "Je te laisse choisir : réponds `A` (refaire pipeline) ou `B` (tout réinitialiser).")
@@ -250,7 +250,8 @@ def _load_tabular_data(source: io.BytesIO, filename: str) -> pd.DataFrame:
 
 def display_chat():
     for msg in st.session_state.messages:
-        with st.chat_message(msg["role"], avatar=CHATBOT_ICON if msg["role"] == "assistant" else "👤"):
+        avatar = CHATBOT_ICON if msg["role"] == "assistant" and CHATBOT_ICON else "👤"
+        with st.chat_message(msg["role"], avatar=avatar):
             content = msg.get("content")
             if msg.get("content_type", "text") == "text":
                 st.markdown(content, unsafe_allow_html=True)
@@ -306,7 +307,7 @@ def perform_analysis():
     except Exception:
         numeric_cols, bool_cols, cat_cols = [], [], []
 
-    # ✅ FIX: tous les éléments en str pour éviter ArrowTypeError
+    # FIX: tous les elements en str pour eviter ArrowTypeError
     summary_df = pd.DataFrame(
         {
             'Valeur': [
@@ -484,7 +485,7 @@ def perform_analysis():
             "plots": [target_dist_plot] if target_dist_plot is not None else [],
         }, content_type="mixed")
 
-    add_message("assistant", "✅ Analyse terminée. Vous pouvez maintenant lancer le prétraitement.")
+    add_message("assistant", "Analyse terminee. Vous pouvez maintenant lancer le pretraitement.")
     st.session_state.analysis_done = True
 
 def perform_preprocessing():
@@ -518,7 +519,7 @@ def perform_preprocessing():
     st.session_state.update(preprocessor=preprocessor, feature_names=feature_names_list,
         X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test)
 
-    # ✅ FIX: tous les éléments en str
+    # FIX: tous les elements en str
     preprocess_summary_df = pd.DataFrame(
         {'Valeur': [str(int(X.shape[1])), str(int(X_transformed.shape[1])),
                     str(int(X_train.shape[0])), str(int(X_test.shape[0]))]},
@@ -556,7 +557,7 @@ def perform_preprocessing():
         transformed_preview_df = None
 
     add_message("assistant", content={
-        "text": _findings_block("✅ Résultat du prétraitement", [
+        "text": _findings_block("Resultat du pretraitement", [
             "Résumé chiffré + tables ci-dessous.",
             "(On évite d'afficher les features en texte : elles sont listées dans un tableau, tronquées.)",
         ]) + _comment_block(
@@ -592,10 +593,10 @@ def perform_automl():
     resampling_strategy = st.session_state.get('resampling_strategy', getattr(cfg, 'RESAMPLING_STRATEGY', 'auto'))
 
     add_message("assistant",
-        _step_banner(3, 6, "🤖 AutoML (recherche + sélection + évaluation)",
+        _step_banner(3, 6, "AutoML (recherche + sélection + évaluation)",
             "Objectif : tester plusieurs modèles, optimiser des hyperparamètres, puis sélectionner le meilleur.")
         + "<div style='margin-top:-0.25rem'>"
-        + "<div style='font-weight:800;margin:0.1rem 0 0.35rem 0'>⚙️ Configuration</div>"
+        + "<div style='font-weight:800;margin:0.1rem 0 0.35rem 0'>Configuration</div>"
         + f"<div style='opacity:.9'>- <b>Type</b> : <code>{task_type}</code></div>"
         + f"<div style='opacity:.9'>- <b>Métrique</b> : <code>{metric}</code></div>"
         + f"<div style='opacity:.9'>- <b>CV</b> : <code>{cv_folds}</code>-fold</div>"
@@ -604,10 +605,10 @@ def perform_automl():
         + (f"<div style='opacity:.9'>- <b>Déséquilibre</b> : <code>{resampling_strategy}</code></div>" if task_type == 'classification' else "")
         + "</div>")
 
-    with st.status("🚀 Pipeline AutoML en cours...", expanded=True) as status:
+    with st.status("Pipeline AutoML en cours...", expanded=True) as status:
         try:
             if task_type == 'classification':
-                status.write("⚖️ Gestion du déséquilibre...")
+                status.write("Gestion du déséquilibre...")
                 resampler = Resampler(strategy=resampling_strategy)
                 is_imbalanced, dist_info = resampler.check_imbalance(y_train)
                 if is_imbalanced:
@@ -643,7 +644,7 @@ def perform_automl():
                         resampling_method = None
 
                     add_message("assistant", content={
-                        "text": _findings_block("⚖️ Déséquilibre des classes (avant / après)", [
+                        "text": _findings_block("Déséquilibre des classes (avant / après)", [
                             f"Majoritaire avant : <b>{dist_info.get('max_proportion', 0)*100:.1f}%</b>",
                             f"Stratégie demandée : <code>{resampling_strategy}</code>",
                             f"Méthode utilisée : <code>{resampling_method or 'inconnue'}</code>",
@@ -664,22 +665,22 @@ def perform_automl():
                     except Exception:
                         pass
                 else:
-                    add_message("assistant", "✅ Classes équilibrées : aucun rééchantillonnage nécessaire.")
+                    add_message("assistant", "Classes équilibrées : aucun rééchantillonnage nécessaire.")
                     st.session_state.resampling_info = {'applied': False}
 
-            status.write("🔍 Recherche de modèles...")
+            status.write("Recherche de modèles...")
             searcher = ModelSearcher(cv=cv_folds, search_method=search_method, n_iter=n_iter)
             search_results = searcher.search_models(X_train, y_train, task_type, metric)
             st.session_state.search_results = search_results
-            add_message("assistant", _step_banner(4, 6, "🔍 Recherche de modèles terminée",
+            add_message("assistant", _step_banner(4, 6, "Recherche de modèles terminée",
                 f"{len(search_results)} modèles testés (CV : moyenne + écart-type sur plusieurs métriques)."))
 
-            status.write("🏆 Sélection du meilleur modèle...")
+            status.write("Sélection du meilleur modèle...")
             selector = ModelSelector(task_type=task_type, metric=metric)
             selection_result = selector.select_best_model(search_results)
             st.session_state.selection_result = selection_result
             add_message("assistant",
-                _step_banner(5, 6, "🏆 Sélection du meilleur modèle",
+                _step_banner(5, 6, "Sélection du meilleur modèle",
                     f"Retenu : {selection_result['best_model_name']} — score CV : {selection_result['best_score']:.4f}")
                 + "Commentaire : ce choix est fait sur la <b>validation croisée</b> pour réduire le risque de sur-apprentissage.")
 
@@ -730,17 +731,17 @@ def perform_automl():
             try:
                 if evaluation.get('overfitting', {}).get('detected'):
                     gap = evaluation['overfitting'].get('gap')
-                    diag_lines.append(f"⚠️ <b>Overfitting détecté</b> (écart train/test ≈ {gap:.3f}).")
+                    diag_lines.append(f"<b>Overfitting détecté</b> (écart train/test ≈ {gap:.3f}).")
                 elif evaluation.get('underfitting', {}).get('detected'):
-                    diag_lines.append("⚠️ <b>Underfitting détecté</b> (scores faibles sur train et test).")
+                    diag_lines.append("<b>Underfitting détecté</b> (scores faibles sur train et test).")
                 else:
-                    diag_lines.append("✅ <b>Généralisation correcte</b> (écart train/test acceptable).")
+                    diag_lines.append("<b>Généralisation correcte</b> (écart train/test acceptable).")
             except Exception:
                 pass
 
             add_message("assistant", content={
-                "text": _step_banner(6, 6, "📊 Évaluation finale", "Train vs test + diagnostic de généralisation")
-                    + _findings_block("📊 Évaluation finale (train vs test)",
+                "text": _step_banner(6, 6, "Évaluation finale", "Train vs test + diagnostic de généralisation")
+                    + _findings_block("Évaluation finale (train vs test)",
                         ["<br/>".join(diag_lines) if diag_lines else "Diagnostic de généralisation effectué."]),
                 "dataframes": [metrics_df] if metrics_df is not None else [],
                 "plots": plots,
@@ -760,7 +761,7 @@ def perform_automl():
                             fi_top_comment = ""
                         fi_plot = plot_feature_importance(fi, top_n=15)
                         add_message("assistant", content={
-                            "text": _findings_block("💡 Importance des variables", ["Graphique des variables les plus influentes."])
+                            "text": _findings_block("Importance des variables", ["Graphique des variables les plus influentes."])
                                 + _comment_block(fi_top_comment or "Les premières variables du graphe sont celles qui contribuent le plus."),
                             "plots": [fi_plot] if fi_plot is not None else [],
                         }, content_type="mixed")
@@ -784,16 +785,17 @@ def perform_automl():
             except Exception:
                 pass
 
-            status.update(label="✅ Pipeline AutoML terminé !", state="complete")
+            status.update(label="Pipeline AutoML termine !", state="complete")
             st.session_state.automl_done = True
             st.balloons()
         except Exception as e:
-            status.update(label="❌ Erreur durant le pipeline", state="error")
-            add_message("assistant", f"❌ <b>Erreur :</b> {e}")
+            status.update(label="Erreur durant le pipeline", state="error")
+            add_message("assistant", f"<b>Erreur :</b> {e}")
 
 # --- Interface principale ---
 def main():
-    st.title(f"{CHATBOT_ICON} {CHATBOT_NAME}")
+    icon_display = CHATBOT_ICON if CHATBOT_ICON else ""
+    st.title(f"{icon_display} {CHATBOT_NAME}")
 
     dataset_loaded = st.session_state.dataset is not None
     analysis_done = st.session_state.get('analysis_done', False)
@@ -816,7 +818,7 @@ def main():
                         st.session_state.current_file_name = uploaded_file.name
                         st.session_state.uploaded_file_sig = file_sig
                         _reset_pipeline_state(keep_messages=True)
-                        add_message("assistant", f"✅ Dataset `{uploaded_file.name}` chargé. Choisissez une cible.")
+                        add_message("assistant", f"Dataset `{uploaded_file.name}` charge. Choisissez une cible.")
                         st.rerun()
                     except Exception as e:
                         st.error(f"Erreur de lecture: {e}")

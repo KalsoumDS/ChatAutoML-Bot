@@ -16,22 +16,22 @@ def create_final_summary(analysis: Dict[str, Any],
     """
     Crée un résumé complet du pipeline du début à la fin
     """
-    summary = f"""# 📊 Résumé Complet du Pipeline AutoML
+    summary = f"""# Résumé Complet du Pipeline AutoML
 
-## 🎯 1. Objectif et Configuration Initiale
+## 1. Objectif et Configuration Initiale
 
 **Type de tâche** : {task_type.upper()}
 **Dataset** : {analysis['shape']['rows']:,} lignes × {analysis['shape']['columns']} colonnes
 **Colonne cible** : {analysis.get('target_info', {}).get('column', 'N/A')}
 
-**📋 Caractéristiques du dataset** :
+**Caractéristiques du dataset** :
 - **Colonnes numériques** : {len([c for c, info in analysis.get('columns', {}).items() if info.get('type') == 'numeric'])}
 - **Colonnes catégorielles** : {len([c for c, info in analysis.get('columns', {}).items() if info.get('type') == 'categorical'])}
 - **Valeurs manquantes** : {sum(info.get('count', 0) for info in analysis.get('missing_values', {}).values())} valeurs au total
 
 ---
 
-## 🔧 2. Preprocessing (Prétraitement)
+## 2. Preprocessing (Prétraitement)
 
 ### 2.1 Séparation Features/Cible
 - **Features (X)** : {preprocessing_info.get('n_features_before', 'N/A')} colonnes
@@ -49,7 +49,7 @@ def create_final_summary(analysis: Dict[str, Any],
         summary += "  - Catégorielles → Imputation par **'Unknown'**\n"
         summary += "  - Booléennes → Imputation par le **mode**\n"
     else:
-        summary += "- ✅ **Aucune valeur manquante** détectée\n"
+        summary += "- **Aucune valeur manquante** détectée\n"
     
     summary += f"""
 ### 2.3 Encodage des Variables Catégorielles
@@ -63,30 +63,30 @@ def create_final_summary(analysis: Dict[str, Any],
 ### 2.5 Split Train/Test
 - **Train** : {preprocessing_info.get('n_train', 'N/A')} échantillons ({preprocessing_info.get('train_pct', 'N/A')}%)
 - **Test** : {preprocessing_info.get('n_test', 'N/A')} échantillons ({preprocessing_info.get('test_pct', 'N/A')}%)
-- **Stratification** : {'✅ Appliquée' if task_type == 'classification' else 'N/A (régression)'}
+- **Stratification** : {'Appliquée' if task_type == 'classification' else 'N/A (régression)'}
 
 ### 2.6 Résultat du Preprocessing
 - **Avant** : {preprocessing_info.get('n_features_before', 'N/A')} colonnes
 - **Après** : {preprocessing_info.get('n_features_after', 'N/A')} features
-- **Transformation** : Prêt pour l'entraînement ✅
+- **Transformation** : Prêt pour l'entraînement
 
 ---
 
-## ⚖️ 3. Gestion du Déséquilibre (Classification uniquement)
+## 3. Gestion du Déséquilibre (Classification uniquement)
 """
     
     if task_type == 'classification' and resampling_info:
         if resampling_info.get('applied'):
-            summary += f"""**⚠️ Déséquilibre détecté et corrigé**
+            summary += f"""**Déséquilibre détecté et corrigé**
 
 - **Distribution initiale** : {resampling_info.get('initial_distribution', 'N/A')}
 - **Stratégie appliquée** : {resampling_info.get('strategy', 'N/A').upper()}
 - **Échantillons avant** : {resampling_info.get('n_before', 'N/A')}
 - **Échantillons après** : {resampling_info.get('n_after', 'N/A')}
-- **Impact** : Les classes sont maintenant équilibrées pour un apprentissage équitable ✅
+- **Impact** : Les classes sont maintenant équilibrées pour un apprentissage équitable
 """
         else:
-            summary += """**✅ Classes équilibrées**
+            summary += """**Classes équilibrées**
 
 - Aucun rééchantillonnage nécessaire
 - Les classes sont naturellement équilibrées
@@ -97,7 +97,7 @@ def create_final_summary(analysis: Dict[str, Any],
     summary += f"""
 ---
 
-## 🔍 4. Recherche de Modèles et Optimisation
+## 4. Recherche de Modèles et Optimisation
 
 ### 4.1 Modèles Testés
 **{len(search_results)} modèles** ont été testés avec optimisation d'hyperparamètres :
@@ -120,9 +120,9 @@ def create_final_summary(analysis: Dict[str, Any],
 
 ---
 
-## 🏆 5. Sélection du Meilleur Modèle
+## 5. Sélection du Meilleur Modèle
 
-**✅ Modèle retenu** : **{selection_result.get('best_model_name', 'N/A')}**
+**Modèle retenu** : **{selection_result.get('best_model_name', 'N/A')}**
 
 ### 5.1 Performance
 - **Score principal** : **{selection_result.get('best_score', 0):.4f}**
@@ -140,7 +140,7 @@ Ce modèle a été sélectionné car il présente la **meilleure performance** s
 
 ---
 
-## 📈 6. Évaluation Complète
+## 6. Évaluation Complète
 
 ### 6.1 Performances sur Train vs Test
 """
@@ -170,7 +170,7 @@ Ce modèle a été sélectionné car il présente la **meilleure performance** s
     
     if evaluation.get('overfitting', {}).get('detected'):
         overfitting = evaluation['overfitting']
-        summary += f"""⚠️ **OVERFITTING DÉTECTÉ**
+        summary += f"""**OVERFITTING DÉTECTÉ**
 
 - **Écart train/test** : {overfitting.get('gap', 0):.4f}
 - **Score train** : {overfitting.get('train_score', 0):.4f}
@@ -181,7 +181,7 @@ Ce modèle a été sélectionné car il présente la **meilleure performance** s
 """
     elif evaluation.get('underfitting', {}).get('detected'):
         underfitting = evaluation['underfitting']
-        summary += f"""⚠️ **UNDERFITTING DÉTECTÉ**
+        summary += f"""**UNDERFITTING DÉTECTÉ**
 
 - **Score train** : {underfitting.get('train_score', 0):.4f}
 - **Score test** : {underfitting.get('test_score', 0):.4f}
@@ -190,7 +190,7 @@ Ce modèle a été sélectionné car il présente la **meilleure performance** s
 
 """
     else:
-        summary += """✅ **GÉNÉRALISATION CORRECTE**
+        summary += """**GÉNÉRALISATION CORRECTE**
 
 - Le modèle performe bien sur les données d'entraînement ET de test
 - L'écart entre train et test est acceptable
@@ -201,17 +201,17 @@ Ce modèle a été sélectionné car il présente la **meilleure performance** s
     summary += f"""
 ---
 
-## 💡 7. Insights et Recommandations
+## 7. Insights et Recommandations
 
 ### 7.1 Points Forts
-- ✅ Preprocessing complet et adapté au type de données
+- Preprocessing complet et adapté au type de données
 """
     
     if task_type == 'classification' and resampling_info and resampling_info.get('applied'):
-        summary += "- ✅ Déséquilibre des classes géré efficacement\n"
+        summary += "- Déséquilibre des classes géré efficacement\n"
     
-    summary += f"- ✅ {len(search_results)} modèles testés avec optimisation rigoureuse\n"
-    summary += f"- ✅ Meilleur modèle sélectionné : {selection_result.get('best_model_name', 'N/A')}\n"
+    summary += f"- {len(search_results)} modèles testés avec optimisation rigoureuse\n"
+    summary += f"- Meilleur modèle sélectionné : {selection_result.get('best_model_name', 'N/A')}\n"
     
     summary += "\n### 7.2 Points d'Attention\n"
     
@@ -219,13 +219,13 @@ Ce modèle a été sélectionné car il présente la **meilleure performance** s
     missing_cols = [col for col, info in analysis.get('missing_values', {}).items() 
                    if info.get('percentage', 0) > 10]
     if missing_cols:
-        summary += f"- ⚠️ {len(missing_cols)} colonnes ont plus de 10% de valeurs manquantes\n"
+        summary += f"- {len(missing_cols)} colonnes ont plus de 10% de valeurs manquantes\n"
     
     # Overfitting/underfitting
     if evaluation.get('overfitting', {}).get('detected'):
-        summary += "- ⚠️ Overfitting détecté - nécessite attention\n"
+        summary += "- Overfitting détecté - nécessite attention\n"
     elif evaluation.get('underfitting', {}).get('detected'):
-        summary += "- ⚠️ Underfitting détecté - modèle peut être amélioré\n"
+        summary += "- Underfitting détecté - modèle peut être amélioré\n"
     
     summary += "\n### 7.3 Pistes d'Amélioration\n"
     summary += "1. **Feature Engineering** : Créer de nouvelles features à partir des existantes\n"
@@ -237,11 +237,11 @@ Ce modèle a été sélectionné car il présente la **meilleure performance** s
         summary += "5. **Régularisation** : Augmenter la régularisation pour réduire l'overfitting\n"
     
     summary += "\n---\n\n"
-    summary += "## ✅ Conclusion\n\n"
+    summary += "## Conclusion\n\n"
     summary += f"Le pipeline AutoML a été exécuté avec succès ! Le modèle **{selection_result.get('best_model_name', 'N/A')}** "
     summary += f"a été sélectionné avec un score de **{selection_result.get('best_score', 0):.4f}**. "
     summary += "Le modèle est prêt à être utilisé pour faire des prédictions sur de nouvelles données.\n\n"
-    summary += "**🎯 Prochaines étapes** : Utiliser ce modèle pour faire des prédictions ou continuer à l'optimiser selon vos besoins."
+    summary += "**Prochaines étapes** : Utiliser ce modèle pour faire des prédictions ou continuer à l'optimiser selon vos besoins."
     
     return summary
 

@@ -23,11 +23,11 @@ def create_progress_indicator(current_step: int, total_steps: int, step_name: st
     steps = []
     for i in range(1, total_steps + 1):
         if i < current_step:
-            steps.append("✅")
+            steps.append("[OK]")
         elif i == current_step:
-            steps.append("🔄")
+            steps.append("[En cours]")
         else:
-            steps.append("⏳")
+            steps.append("[En attente]")
     st.markdown(" ".join(steps))
 
 
