@@ -1,60 +1,78 @@
-# 🤖 ChatAutoML — Démocratisation de la Data Science par l'IA No-Code
+# ChatAutoML — Conversational No-Code AutoML Platform
 
-> Assistant conversationnel AutoML permettant aux équipes non-techniciennes (ONG, PME) de transformer des données brutes en modèles prédictifs optimisés via le langage naturel.
+> Conversational AutoML assistant enabling non-technical teams (NGOs, SMEs) to transform raw data into optimized predictive models through natural language.
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![Optuna](https://img.shields.io/badge/Optuna-3.0+-blueviolet)
-![Streamlit](https://img.shields.io/badge/Streamlit-1.35+-red)
-![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-1.3+-orange)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue)](https://python.org)
+[![Optuna](https://img.shields.io/badge/Optuna-3.0+-blueviolet)](https://optuna.org)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.35+-red)](https://streamlit.io)
+[![Live Demo](https://img.shields.io/badge/Demo-Live-brightgreen)](https://lbx6ryyhzigbsh3d5uwiyg.streamlit.app/)
 
----
-
-## 🎯 Problématique Métier & Impact Sociétal
-
-Les petites structures (ONG, PME, associations) manquent souvent de data scientists dédiés pour analyser leurs données, préparer leurs jeux de données et créer des modèles prédictifs.
-
-### 💡 Solution & Valeur Ajoutée
-**ChatAutoML** agit comme un **Data Scientist virtuel** accessible en langage naturel :
-- **No-Code / Low-Code** : Ingestion du fichier CSV et prétraitement automatique.
-- **Sélection & Optimisation Optuna** : Comparaison de plusieurs algorithmes (Random Forest, Gradient Boosting, XGBoost) et recherche d'hyperparamètres.
-- **Explications en langage clair** : Interprétabilité des métriques et recommandations grâce aux modules d'explication IA.
+**Live application:** https://lbx6ryyhzigbsh3d5uwiyg.streamlit.app/
 
 ---
 
-## 🚀 Fonctionnalités Clés
+## Overview
 
-- 💬 **Interface Conversationnelle** : Interaction fluide pour guider l'utilisateur étape par étape.
-- 🧹 **Pre-processing Automatique** : Gestion des valeurs manquantes, encodage et normalisation.
-- ⚙️ **Hyperparameter Search (Optuna)** : Optimisation automatique des performances des modèles.
-- 📊 **Tableau de Bord d'Évaluation** : Matrice de confusion, courbes ROC et feature importance interactives.
+Small organizations (NGOs, SMEs, associations) rarely have dedicated data scientists to analyze their data and build predictive models. ChatAutoML acts as a virtual data scientist accessible through natural language.
 
 ---
 
-## 🛠️ Installation & Lancement
+## Features
 
-```bash
-# Cloner le dépôt
-git clone https://github.com/KalsoumDS/ChatAutoML-Bot.git
-cd ChatAutoML-Bot
+- **No-Code Ingestion** — Upload a CSV file, preprocessing is fully automatic (missing values, encoding, scaling).
+- **Bayesian Hyperparameter Optimization** — Optuna tunes 8 ML algorithms (Random Forest, XGBoost, LightGBM, Gradient Boosting, Logistic Regression, SVM, KNN, Decision Tree) within 60 seconds.
+- **Automated Reporting** — Export with performance metrics, confusion matrix, feature importance, and plain-language recommendations.
+- **Conversational Interface** — Users interact in natural language to drive the ML pipeline without writing code.
 
-# Installer les dépendances
-pip install -r requirements.txt
+---
 
-# Lancer l'application Streamlit
-streamlit run streamlit_app.py
+## Architecture
+
+```
+Input CSV
+    |
+Automatic Preprocessing (imputation, encoding, scaling)
+    |
+Algorithm Benchmark (8 models, cross-validation)
+    |
+Optuna Bayesian Optimization (best model tuned)
+    |
+Explainability (SHAP / feature importance)
+    |
+Streamlit Interface + Report
 ```
 
 ---
 
-## 🔬 Stack Technique
+## Performance
 
-- **AutoML & Search** : Optuna, Scikit-learn
-- **Interface & Visualisation** : Streamlit, Plotly
-- **Data Engineering** : Pandas, NumPy
+- 8 ML algorithms benchmarked per run
+- Hyperparameter search via Optuna TPE sampler
+- Full pipeline (ingestion to optimized model) under 60 seconds
 
 ---
 
-## ✍️ Auteur
+## Installation
 
-**Oumou Kaltoum Sall** — Data Scientist & ML Engineer  
-[LinkedIn](https://linkedin.com/in/oumou-kaltoum-sall) · [GitHub](https://github.com/KalsoumDS) · [Portfolio](http://localhost:3001)
+```bash
+git clone https://github.com/KalsoumDS/ChatAutoML-Bot.git
+cd ChatAutoML-Bot
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+---
+
+## Technologies
+
+- Python 3.10+, Optuna, Scikit-learn, XGBoost, LightGBM
+- Streamlit, SHAP, pandas, NumPy
+
+---
+
+## Author
+
+Oumou Kaltoum Sall — Data Scientist & ML Engineer  
+[Portfolio](https://luxury-sunshine-073627.netlify.app) · [LinkedIn](https://linkedin.com/in/oumou-kaltoum-sall)
