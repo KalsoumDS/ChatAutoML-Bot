@@ -1,6 +1,6 @@
-# 📥 Comment Obtenir les Datasets
+#  Comment Obtenir les Datasets
 
-## 🚀 Méthode 1 : Script Automatique (Recommandé)
+##  Méthode 1 : Script Automatique (Recommandé)
 
 Exécutez simplement cette commande dans votre terminal :
 
@@ -10,13 +10,13 @@ python datasets/download_datasets.py
 ```
 
 **Ce script va :**
-- ✅ Télécharger les datasets réels (Titanic, Iris, Wine Quality, etc.)
-- ✅ Créer automatiquement 8 datasets d'exemple variés
-- ✅ Tout sauvegarder dans le dossier `datasets/`
+-  Télécharger les datasets réels (Titanic, Iris, Wine Quality, etc.)
+-  Créer automatiquement 8 datasets d'exemple variés
+-  Tout sauvegarder dans le dossier `datasets/`
 
-## 📊 Datasets Disponibles
+##  Datasets Disponibles
 
-### ✅ Datasets Générés (Toujours Disponibles)
+###  Datasets Générés (Toujours Disponibles)
 
 Ces datasets sont créés automatiquement et ne nécessitent pas de connexion internet :
 
@@ -29,11 +29,11 @@ Ces datasets sont créés automatiquement et ne nécessitent pas de connexion in
 7. **sample_regression_outliers.csv** - Régression avec outliers
 8. **sample_small.csv** - Petit dataset (50 échantillons) pour tests rapides
 
-### 📥 Datasets Réels (Nécessitent Internet)
+###  Datasets Réels (Nécessitent Internet)
 
 Si le téléchargement automatique échoue (problème SSL), vous pouvez les télécharger manuellement :
 
-#### 1. **Iris** ✅ (Déjà téléchargé)
+#### 1. **Iris**  (Déjà téléchargé)
 - **Fichier** : `datasets/iris.csv`
 - **Colonne cible** : `species` ou `target`
 - **Type** : Classification multiclasse
@@ -74,7 +74,7 @@ Si le téléchargement automatique échoue (problème SSL), vous pouvez les tél
 - **Colonne cible** : Variable selon le fichier
 - **Type** : Classification ou Régression
 
-## 🎯 Utilisation dans ChatAutoML-Bot
+##  Utilisation dans ChatAutoML-Bot
 
 Une fois les datasets dans le dossier `datasets/` :
 
@@ -84,24 +84,24 @@ Une fois les datasets dans le dossier `datasets/` :
    ```
 
 2. **Dans l'interface** :
-   - Cliquez sur "📁 Charger un Dataset" dans le menu latéral
+   - Cliquez sur " Charger un Dataset" dans le menu latéral
    - Sélectionnez un fichier CSV depuis `datasets/`
    - Choisissez la colonne cible
    - Lancez AutoML !
 
-## 💡 Recommandations
+##  Recommandations
 
 ### Pour débuter rapidement :
-- ✅ **sample_small.csv** - Très rapide (50 échantillons)
-- ✅ **iris.csv** - Dataset classique, bien équilibré
-- ✅ **sample_binary_classification.csv** - Classification simple
+-  **sample_small.csv** - Très rapide (50 échantillons)
+-  **iris.csv** - Dataset classique, bien équilibré
+-  **sample_binary_classification.csv** - Classification simple
 
 ### Pour tester toutes les fonctionnalités :
-- ✅ **sample_imbalanced_binary.csv** - Teste le déséquilibre
-- ✅ **sample_with_missing_values.csv** - Teste l'imputation
-- ✅ **sample_mixed_features.csv** - Teste le preprocessing complet
+-  **sample_imbalanced_binary.csv** - Teste le déséquilibre
+-  **sample_with_missing_values.csv** - Teste l'imputation
+-  **sample_mixed_features.csv** - Teste le preprocessing complet
 
-## 🔧 Résolution de Problèmes
+##  Résolution de Problèmes
 
 ### Problème SSL (Certificat)
 Si vous voyez des erreurs SSL lors du téléchargement :
@@ -117,12 +117,12 @@ ssl._create_default_https_context = ssl._create_unverified_context
 ### Datasets Manquants
 Les datasets d'exemple sont **toujours créés** même si les téléchargements échouent. Vous avez donc au minimum 8 datasets pour tester l'application !
 
-## 📝 Note
+##  Note
 
 Les datasets générés utilisent `random_state=42` pour garantir la reproductibilité. Vous obtiendrez toujours les mêmes résultats.
 
 ---
 
-**Bon entraînement ! 🚀**
+**Bon entraînement ! **
 
 
