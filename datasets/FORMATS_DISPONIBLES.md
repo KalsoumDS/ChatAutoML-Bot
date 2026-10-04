@@ -1,17 +1,17 @@
-# 📁 Formats de Fichiers Disponibles
+#  Formats de Fichiers Disponibles
 
-## ✅ Formats Supportés par ChatAutoML-Bot
+##  Formats Supportés par ChatAutoML-Bot
 
 L'application supporte **4 formats de fichiers** selon le cahier des charges :
 
-1. **CSV** (.csv) ✅
-2. **Excel** (.xlsx, .xls) ⚠️ (nécessite openpyxl)
-3. **Parquet** (.parquet) ✅
-4. **JSON tabulaire** (.json) ✅
+1. **CSV** (.csv) 
+2. **Excel** (.xlsx, .xls)  (nécessite openpyxl)
+3. **Parquet** (.parquet) 
+4. **JSON tabulaire** (.json) 
 
 ---
 
-## 📊 Datasets Disponibles dans Tous les Formats
+##  Datasets Disponibles dans Tous les Formats
 
 ### Datasets Générés
 
@@ -75,7 +75,7 @@ Chaque dataset est disponible dans **4 formats** :
 
 ---
 
-## 🔧 Installation des Dépendances
+##  Installation des Dépendances
 
 Pour créer les fichiers Excel, installez `openpyxl` :
 
@@ -91,7 +91,7 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Comment Créer Tous les Formats
+##  Comment Créer Tous les Formats
 
 Exécutez le script de création :
 
@@ -100,13 +100,13 @@ python datasets/create_all_formats.py
 ```
 
 Ce script va :
-- ✅ Créer des datasets dans tous les formats
-- ✅ Convertir les datasets existants
-- ✅ Générer CSV, Excel, Parquet et JSON
+-  Créer des datasets dans tous les formats
+-  Convertir les datasets existants
+-  Générer CSV, Excel, Parquet et JSON
 
 ---
 
-## 📝 Format JSON Tabulaire
+##  Format JSON Tabulaire
 
 Le format JSON est une **liste de dictionnaires** comme spécifié dans le cahier des charges :
 
@@ -127,7 +127,7 @@ Le format JSON est une **liste de dictionnaires** comme spécifié dans le cahie
 
 ---
 
-## ✅ Vérification
+##  Vérification
 
 Pour vérifier quels formats sont disponibles :
 
@@ -141,7 +141,7 @@ ls datasets/*.json
 
 ---
 
-## 💡 Utilisation dans l'Application
+##  Utilisation dans l'Application
 
 1. **Lancez ChatAutoML-Bot** :
    ```bash
@@ -149,7 +149,7 @@ ls datasets/*.json
    ```
 
 2. **Dans le menu latéral** :
-   - Cliquez sur "📁 Charger un Dataset"
+   - Cliquez sur " Charger un Dataset"
    - Sélectionnez **n'importe quel format** (CSV, Excel, Parquet, JSON)
    - L'application détectera automatiquement le format et chargera les données
 
@@ -160,18 +160,18 @@ ls datasets/*.json
 
 ---
 
-## 📊 Résumé
+##  Résumé
 
 | Format | Extension | Statut | Notes |
 |--------|-----------|--------|-------|
-| CSV | .csv | ✅ Disponible | Format standard |
-| Excel | .xlsx | ⚠️ Nécessite openpyxl | Format moderne Excel |
-| Excel | .xls | ⚠️ Format obsolète | Utilisez .xlsx |
-| Parquet | .parquet | ✅ Disponible | Format efficace |
-| JSON | .json | ✅ Disponible | Liste de dictionnaires |
+| CSV | .csv |  Disponible | Format standard |
+| Excel | .xlsx |  Nécessite openpyxl | Format moderne Excel |
+| Excel | .xls |  Format obsolète | Utilisez .xlsx |
+| Parquet | .parquet |  Disponible | Format efficace |
+| JSON | .json |  Disponible | Liste de dictionnaires |
 
 ---
 
-**Tous les formats sont prêts à être utilisés ! 🚀**
+**Tous les formats sont prêts à être utilisés ! **
 
 
