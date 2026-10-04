@@ -1,8 +1,8 @@
-# 📊 Liste des Datasets Disponibles
+#  Liste des Datasets Disponibles
 
 Ce document liste tous les datasets disponibles pour tester ChatAutoML-Bot.
 
-## 🚀 Comment utiliser
+##  Comment utiliser
 
 1. **Télécharger les datasets** :
    ```bash
@@ -10,12 +10,12 @@ Ce document liste tous les datasets disponibles pour tester ChatAutoML-Bot.
    ```
 
 2. **Charger dans l'application** :
-   - Utilisez le menu latéral "📁 Charger un Dataset"
+   - Utilisez le menu latéral " Charger un Dataset"
    - Sélectionnez un fichier CSV depuis le dossier `datasets/`
 
 ---
 
-## 📋 Datasets Réels (Téléchargés)
+##  Datasets Réels (Téléchargés)
 
 ### 1. **Titanic** (`titanic.csv`)
 - **Type** : Classification binaire
@@ -67,7 +67,7 @@ Ce document liste tous les datasets disponibles pour tester ChatAutoML-Bot.
 
 ---
 
-## 🧪 Datasets d'Exemple (Générés)
+##  Datasets d'Exemple (Générés)
 
 Ces datasets sont créés automatiquement pour tester différentes fonctionnalités :
 
@@ -137,7 +137,7 @@ Ces datasets sont créés automatiquement pour tester différentes fonctionnalit
 
 ---
 
-## 📊 Résumé par Type
+##  Résumé par Type
 
 ### Classification
 - **Binaire équilibrée** : Titanic, sample_binary_classification, sample_small
@@ -158,7 +158,7 @@ Ces datasets sont créés automatiquement pour tester différentes fonctionnalit
 
 ---
 
-## 💡 Recommandations d'Usage
+##  Recommandations d'Usage
 
 ### Pour débuter
 1. **Iris** : Dataset simple, équilibré, classification multiclasse
@@ -184,7 +184,7 @@ Ces datasets sont créés automatiquement pour tester différentes fonctionnalit
 
 ---
 
-## 🔧 Notes Techniques
+##  Notes Techniques
 
 - Tous les datasets sont au format **CSV**
 - La colonne cible peut avoir différents noms selon le dataset
@@ -193,6 +193,6 @@ Ces datasets sont créés automatiquement pour tester différentes fonctionnalit
 
 ---
 
-**Bon entraînement ! 🚀**
+**Bon entraînement ! **
 
 
