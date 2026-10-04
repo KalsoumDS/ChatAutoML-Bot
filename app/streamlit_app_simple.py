@@ -53,11 +53,11 @@ except ImportError:
 try:
     CHATBOT_NAME = cfg.CHATBOT_NAME
     CHATBOT_DESCRIPTION = getattr(cfg, 'CHATBOT_DESCRIPTION', 'Votre assistant intelligent pour l\'AutoML sur données tabulaires')
-    CHATBOT_ICON = getattr(cfg, 'CHATBOT_ICON', '🤖')
+    CHATBOT_ICON = getattr(cfg, 'CHATBOT_ICON', '')
 except AttributeError:
     CHATBOT_NAME = "TabularAI"
     CHATBOT_DESCRIPTION = "Votre assistant intelligent pour l'AutoML sur données tabulaires"
-    CHATBOT_ICON = "🚀"
+    CHATBOT_ICON = ""
 
 # Configuration de la page
 st.set_page_config(
@@ -370,7 +370,7 @@ def display_chat():
 
         # Avatar explicite pour un rendu plus "chatbot"
         chat_role = "assistant" if role == "assistant" else "user"
-        avatar = st.session_state.get('chatbot_icon', CHATBOT_ICON) if role == "assistant" else "👤"
+        avatar = st.session_state.get('chatbot_icon', CHATBOT_ICON) if role == "assistant" else ""
 
         with st.chat_message(chat_role, avatar=avatar):
             if content_type == "progress":
@@ -408,7 +408,7 @@ def main():
 
     def _main_simple():
         with st.sidebar:
-            st.title("🎛️ Contrôles")
+            st.title(" Contrôles")
 
             action = st.selectbox(
                 "Menu",
@@ -416,7 +416,7 @@ def main():
                 key="main_action"
             )
 
-            with st.expander("🤖 Paramètres du chatbot", expanded=False):
+            with st.expander(" Paramètres du chatbot", expanded=False):
                 chatbot_name = st.text_input(
                     "Nom",
                     value=st.session_state.get('chatbot_name', CHATBOT_NAME),
@@ -435,14 +435,14 @@ def main():
 
             st.divider()
             if st.session_state.get('dataset') is not None:
-                st.success(f"✅ Dataset : {st.session_state.current_file_name}")
+                st.success(f" Dataset : {st.session_state.current_file_name}")
                 st.caption(f"{st.session_state.dataset.shape[0]} lignes × {st.session_state.dataset.shape[1]} colonnes")
             else:
-                st.warning("📁 Aucun dataset chargé")
+                st.warning(" Aucun dataset chargé")
 
             if st.session_state.get('dataset') is not None:
                 if st.session_state.get('target_column'):
-                    st.info(f"🎯 Cible : {st.session_state.target_column}")
+                    st.info(f" Cible : {st.session_state.target_column}")
                 else:
                     opts = ["-- Sélectionner --"] + list(st.session_state.dataset.columns)
                     selected_target = st.selectbox("Colonne cible", opts, key="target_select")
@@ -456,11 +456,11 @@ def main():
             st.divider()
             c1, c2 = st.columns(2)
             with c1:
-                if st.button("🧹 Vider chat", use_container_width=True):
+                if st.button(" Vider chat", use_container_width=True):
                     st.session_state.messages = []
                     st.rerun()
             with c2:
-                if st.button("🔄 Reset", use_container_width=True):
+                if st.button(" Reset", use_container_width=True):
                     for key in list(st.session_state.keys()):
                         del st.session_state[key]
                     st.rerun()
@@ -468,7 +468,7 @@ def main():
             dataset = st.session_state.get('dataset')
             target_column = st.session_state.get('target_column')
             if dataset is not None and (not hasattr(dataset, "empty") or not dataset.empty) and target_column:
-                if st.button("🚀 Lancer AutoML", use_container_width=True, type="primary"):
+                if st.button(" Lancer AutoML", use_container_width=True, type="primary"):
                     with st.spinner("⏳ Pipeline AutoML en cours..."):
                         run_automl()
                         st.rerun()
@@ -484,17 +484,17 @@ def main():
         st.divider()
 
         if action == "Accueil":
-            st.markdown("### 📌 Guide")
+            st.markdown("###  Guide")
             st.markdown("1) Charger Dataset\n2) Choisir cible (sidebar)\n3) Lancer AutoML\n4) Résultats + questions")
 
         elif action == "Charger Dataset":
-            st.title("📁 Charger un Dataset")
+            st.title(" Charger un Dataset")
             source = st.radio(
                 "Source des données",
-                ["📂 Local (datasets)", "⬆️ Upload"]
+                [" Local (datasets)", "⬆ Upload"]
             )
             datasets_dir = Path(__file__).parent.parent / "datasets"
-            if source.startswith("📂"):
+            if source.startswith(""):
                 supported = {'.csv', '.tsv', '.txt', '.xlsx', '.xls', '.parquet', '.json'}
                 local_files = []
                 if datasets_dir.exists():
@@ -503,14 +503,14 @@ def main():
                 if local_files:
                     options = [str(p.relative_to(datasets_dir)) for p in local_files]
                     selected = st.selectbox("Fichier", options)
-                    if st.button("✅ Charger", type="primary", use_container_width=True):
+                    if st.button(" Charger", type="primary", use_container_width=True):
                         df = _load_tabular_from_path(datasets_dir / selected)
                         st.session_state.dataset = df
                         st.session_state.current_file_name = str(selected)
-                        st.success(f"✅ Dataset chargé : {selected}")
+                        st.success(f" Dataset chargé : {selected}")
                         st.dataframe(df.head(), use_container_width=True)
                 else:
-                    st.warning("⚠️ Aucun dataset trouvé dans datasets/")
+                    st.warning(" Aucun dataset trouvé dans datasets/")
             else:
                 uploaded_file = st.file_uploader(
                     "Fichier",
@@ -540,33 +540,33 @@ def main():
                     elif ext == '.json':
                         df = pd.read_json(StringIO(raw.decode('utf-8')))
                     else:
-                        st.error(f"❌ Format non supporté: {ext}")
+                        st.error(f" Format non supporté: {ext}")
                         df = None
                     if df is not None:
                         st.session_state.dataset = df
                         st.session_state.current_file_name = uploaded_file.name
-                        st.success(f"✅ Dataset chargé : {uploaded_file.name}")
+                        st.success(f" Dataset chargé : {uploaded_file.name}")
                         st.dataframe(df.head(), use_container_width=True)
 
         elif action == "Analyser Données":
-            st.title("🔍 Analyse des Données")
+            st.title(" Analyse des Données")
             if st.session_state.get('dataset') is None:
-                st.warning("⚠️ Chargez d'abord un dataset")
+                st.warning(" Chargez d'abord un dataset")
             else:
                 df = st.session_state.dataset
                 st.dataframe(df.head(), use_container_width=True)
 
         elif action == "Lancer AutoML":
-            st.title("🚀 Pipeline AutoML")
+            st.title(" Pipeline AutoML")
             st.info("Choisissez la cible dans la sidebar puis lancez AutoML.")
 
         elif action == "Résultats":
-            st.title("📈 Résultats AutoML")
+            st.title(" Résultats AutoML")
             if st.session_state.get('evaluation') is None:
-                st.warning("⚠️ Lancez d'abord AutoML")
+                st.warning(" Lancez d'abord AutoML")
 
         st.divider()
-        st.subheader("💬 Chat")
+        st.subheader(" Chat")
         if not st.session_state.messages:
             add_message("assistant", f"Bonjour, je suis **{st.session_state.get('chatbot_name', CHATBOT_NAME)}**.")
         display_chat()
@@ -588,7 +588,7 @@ def main():
     def _main_good():
         # Sidebar: navigation + données
         with st.sidebar:
-            st.markdown("### 🧭 Navigation")
+            st.markdown("###  Navigation")
 
             action = st.selectbox(
                 "Menu",
@@ -596,7 +596,7 @@ def main():
                 key="main_action"
             )
 
-            with st.expander("🤖 Chatbot", expanded=False):
+            with st.expander(" Chatbot", expanded=False):
                 chatbot_name = st.text_input(
                     "Nom",
                     value=st.session_state.get('chatbot_name', CHATBOT_NAME),
@@ -615,26 +615,26 @@ def main():
 
             st.divider()
 
-            with st.expander("📁 Dataset", expanded=True):
+            with st.expander(" Dataset", expanded=True):
                 if st.session_state.get('dataset') is not None:
                     st.success(f"Chargé : {st.session_state.current_file_name}")
                     st.caption(f"{st.session_state.dataset.shape[0]} lignes × {st.session_state.dataset.shape[1]} colonnes")
-                    if st.button("🔁 Changer de dataset", use_container_width=True):
+                    if st.button(" Changer de dataset", use_container_width=True):
                         st.session_state.main_action = "Charger Dataset"
                         st.rerun()
                 else:
                     st.warning("Aucun dataset")
-                    if st.button("➕ Charger maintenant", type="primary", use_container_width=True):
+                    if st.button(" Charger maintenant", type="primary", use_container_width=True):
                         st.session_state.main_action = "Charger Dataset"
                         st.rerun()
 
-            with st.expander("🎯 Cible", expanded=True):
+            with st.expander(" Cible", expanded=True):
                 if st.session_state.get('dataset') is None:
                     st.info("Chargez un dataset d'abord")
                 else:
                     if st.session_state.get('target_column'):
                         st.success(f"Cible : {st.session_state.target_column}")
-                        if st.button("✏️ Modifier la cible", use_container_width=True):
+                        if st.button(" Modifier la cible", use_container_width=True):
                             st.session_state.target_column = None
                             st.rerun()
                     else:
@@ -650,7 +650,7 @@ def main():
                     if st.session_state.get('task_type'):
                         st.caption(f"Type détecté : **{st.session_state.task_type}**")
 
-            with st.expander("🚀 AutoML", expanded=True):
+            with st.expander(" AutoML", expanded=True):
                 dataset = st.session_state.get('dataset')
                 target_column = st.session_state.get('target_column')
                 ready = dataset is not None and (not hasattr(dataset, "empty") or not dataset.empty) and target_column
@@ -658,21 +658,21 @@ def main():
                 if not ready:
                     st.info("Dataset + cible requis")
                 else:
-                    if st.button("🚀 Lancer AutoML", use_container_width=True, type="primary"):
+                    if st.button(" Lancer AutoML", use_container_width=True, type="primary"):
                         with st.spinner("⏳ Pipeline AutoML en cours..."):
                             try:
                                 run_automl()
                                 st.session_state.main_action = "Résultats"
                                 st.rerun()
                             except Exception as e:
-                                st.error(f"❌ Erreur : {str(e)}")
+                                st.error(f" Erreur : {str(e)}")
 
-            with st.expander("🧹 Actions", expanded=False):
-                if st.button("🧹 Vider chat", use_container_width=True):
+            with st.expander(" Actions", expanded=False):
+                if st.button(" Vider chat", use_container_width=True):
                     st.session_state.messages = []
                     st.rerun()
 
-                if st.button("🔄 Reset complet", use_container_width=True):
+                if st.button(" Reset complet", use_container_width=True):
                     for key in list(st.session_state.keys()):
                         del st.session_state[key]
                     st.rerun()
@@ -692,7 +692,7 @@ def main():
             st.divider()
 
             if action == "Accueil":
-                st.markdown("### 📌 Guide du projet")
+                st.markdown("###  Guide du projet")
                 st.markdown(
                     "1) **Charger Dataset**\n"
                     "2) **Choisir la cible** (dans la sidebar)\n"
@@ -701,33 +701,33 @@ def main():
                 )
 
             elif action == "Charger Dataset":
-                st.title("📁 Charger un Dataset")
+                st.title(" Charger un Dataset")
                 source = st.radio(
                     "Source des données",
-                    ["📂 Choisir un dataset local (dossier datasets)", "⬆️ Importer un fichier (upload)"]
+                    [" Choisir un dataset local (dossier datasets)", "⬆ Importer un fichier (upload)"]
                 )
 
                 datasets_dir = Path(__file__).parent.parent / "datasets"
-                if source.startswith("📂"):
+                if source.startswith(""):
                     supported = {'.csv', '.tsv', '.txt', '.xlsx', '.xls', '.parquet', '.json'}
                     local_files = []
                     if datasets_dir.exists():
                         local_files = [p for p in datasets_dir.rglob('*') if p.is_file() and p.suffix.lower() in supported]
                     local_files = sorted(local_files, key=lambda p: str(p).lower())
                     if not local_files:
-                        st.warning("⚠️ Aucun dataset tabulaire trouvé dans datasets/")
+                        st.warning(" Aucun dataset tabulaire trouvé dans datasets/")
                     else:
                         options = [str(p.relative_to(datasets_dir)) for p in local_files]
                         selected = st.selectbox("Choisir un fichier", options)
-                        if st.button("✅ Charger", type="primary", use_container_width=True):
+                        if st.button(" Charger", type="primary", use_container_width=True):
                             try:
                                 df = _load_tabular_from_path(datasets_dir / selected)
                                 st.session_state.dataset = df
                                 st.session_state.current_file_name = str(selected)
-                                st.success(f"✅ Dataset chargé : {selected}")
+                                st.success(f" Dataset chargé : {selected}")
                                 st.dataframe(df.head(), use_container_width=True)
                             except Exception as e:
-                                st.error(f"❌ Erreur lors du chargement : {str(e)}")
+                                st.error(f" Erreur lors du chargement : {str(e)}")
                 else:
                     uploaded_file = st.file_uploader(
                         "Sélectionnez votre fichier",
@@ -769,39 +769,39 @@ def main():
 
                             st.session_state.dataset = df
                             st.session_state.current_file_name = uploaded_file.name
-                            st.success(f"✅ Dataset chargé : {uploaded_file.name}")
+                            st.success(f" Dataset chargé : {uploaded_file.name}")
                             st.dataframe(df.head(), use_container_width=True)
                         except Exception as e:
-                            st.error(f"❌ Erreur lors du chargement : {str(e)}")
+                            st.error(f" Erreur lors du chargement : {str(e)}")
 
             elif action == "Analyser Données":
-                st.title("🔍 Analyse des Données")
+                st.title(" Analyse des Données")
                 if st.session_state.get('dataset') is None:
-                    st.warning("⚠️ Chargez d'abord un dataset")
+                    st.warning(" Chargez d'abord un dataset")
                 else:
                     df = st.session_state.dataset
-                    st.subheader("📊 Aperçu")
+                    st.subheader(" Aperçu")
                     st.dataframe(df.head(20), use_container_width=True)
 
             elif action == "Lancer AutoML":
-                st.title("🚀 Pipeline AutoML")
+                st.title(" Pipeline AutoML")
                 if st.session_state.get('dataset') is None:
-                    st.warning("⚠️ Chargez d'abord un dataset")
+                    st.warning(" Chargez d'abord un dataset")
                 elif st.session_state.get('target_column') is None:
-                    st.warning("⚠️ Sélectionnez une colonne cible (sidebar)")
+                    st.warning(" Sélectionnez une colonne cible (sidebar)")
                 else:
-                    st.info("Cliquez sur **🚀 Lancer AutoML** dans la sidebar.")
+                    st.info("Cliquez sur ** Lancer AutoML** dans la sidebar.")
 
             elif action == "Résultats":
-                st.title("📈 Résultats AutoML")
+                st.title(" Résultats AutoML")
                 if st.session_state.get('evaluation') is None:
-                    st.warning("⚠️ Lancez d'abord AutoML")
+                    st.warning(" Lancez d'abord AutoML")
                 else:
                     evaluation = st.session_state.evaluation
                     selection_result = st.session_state.selection_result
                     if selection_result is not None:
                         st.success(
-                            f"🏆 **{selection_result.get('best_model_name', 'N/A')}** — score : {selection_result.get('best_score', 0):.4f}"
+                            f" **{selection_result.get('best_model_name', 'N/A')}** — score : {selection_result.get('best_score', 0):.4f}"
                         )
 
         with col_chat:
@@ -850,13 +850,13 @@ def main():
 
     # Sidebar minimale
     with st.sidebar:
-        st.title("⚙️ Données")
-        if st.button("🔄 Reset", use_container_width=True):
+        st.title(" Données")
+        if st.button(" Reset", use_container_width=True):
             for key in list(st.session_state.keys()):
                 del st.session_state[key]
             st.rerun()
 
-        with st.expander("🤖 Paramètres", expanded=False):
+        with st.expander(" Paramètres", expanded=False):
             chatbot_name = st.text_input(
                 "Nom",
                 value=st.session_state.get('chatbot_name', CHATBOT_NAME),
@@ -875,12 +875,12 @@ def main():
 
         st.divider()
         if st.session_state.get('dataset') is not None:
-            st.success(f"✅ Dataset : {st.session_state.current_file_name}")
+            st.success(f" Dataset : {st.session_state.current_file_name}")
             st.caption(f"{st.session_state.dataset.shape[0]} lignes × {st.session_state.dataset.shape[1]} colonnes")
             if st.session_state.get('target_column'):
-                st.info(f"🎯 Cible : {st.session_state.target_column}")
+                st.info(f" Cible : {st.session_state.target_column}")
         else:
-            st.warning("📁 Aucun dataset")
+            st.warning(" Aucun dataset")
 
     # Flux guidé (piloté par le chatbot)
     if 'flow_step' not in st.session_state:
@@ -909,7 +909,7 @@ def main():
         st.markdown("### Chats")
         search = st.text_input("Rechercher", value="", key="conv_search")
 
-        if st.button("➕ Nouvelle discussion", use_container_width=True):
+        if st.button(" Nouvelle discussion", use_container_width=True):
             new_id = f"conv_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
             conversations = st.session_state.get('conversations', {})
             conversations[new_id] = {"name": f"Discussion {len(conversations)+1}", "messages": []}
@@ -927,7 +927,7 @@ def main():
 
         for cid, name in items:
             is_active = cid == st.session_state.get('current_conversation_id')
-            label = f"➡️ {name}" if is_active else name
+            label = f" {name}" if is_active else name
             if st.button(label, use_container_width=True, key=f"conv_btn_{cid}"):
                 st.session_state.current_conversation_id = cid
                 st.session_state.messages = conversations[cid].get('messages', [])
@@ -938,7 +938,7 @@ def main():
         st.caption("Données & actions")
         st.divider()
 
-        if st.button("🧹 Vider l'historique", use_container_width=True):
+        if st.button(" Vider l'historique", use_container_width=True):
             conv_id = st.session_state.get('current_conversation_id', 'conv_default')
             conversations = st.session_state.get('conversations', {})
             if conv_id in conversations:
@@ -953,53 +953,53 @@ def main():
 
         b1, b2 = st.columns(2)
         with b1:
-            if st.button("📁 Charger", use_container_width=True):
+            if st.button(" Charger", use_container_width=True):
                 st.session_state.flow_step = "charger"
                 st.rerun()
         with b2:
-            if st.button("🎯 Cible", use_container_width=True):
+            if st.button(" Cible", use_container_width=True):
                 st.session_state.flow_step = "cible"
                 st.rerun()
         b3, b4 = st.columns(2)
         with b3:
-            if st.button("🚀 AutoML", use_container_width=True):
+            if st.button(" AutoML", use_container_width=True):
                 st.session_state.flow_step = "automl"
                 st.rerun()
         with b4:
-            if st.button("📈 Résultats", use_container_width=True):
+            if st.button(" Résultats", use_container_width=True):
                 st.session_state.flow_step = "resultats"
                 st.rerun()
 
         st.divider()
         if st.session_state.get('dataset') is not None:
-            st.success("✅ Dataset chargé")
+            st.success(" Dataset chargé")
             st.caption(st.session_state.get('current_file_name', ''))
         if st.session_state.get('target_column'):
-            st.info(f"🎯 Cible : {st.session_state.get('target_column')}")
+            st.info(f" Cible : {st.session_state.get('target_column')}")
 
         if step == "automl" and st.session_state.get('dataset') is not None and st.session_state.get('target_column') is not None:
-            if st.button("▶️ Lancer AutoML maintenant", type="primary", use_container_width=True):
+            if st.button("▶ Lancer AutoML maintenant", type="primary", use_container_width=True):
                 with st.spinner("⏳ Pipeline AutoML en cours..."):
                     try:
                         run_automl()
                         st.session_state.flow_step = "resultats"
                         st.rerun()
                     except Exception as e:
-                        st.error(f"❌ Erreur : {str(e)}")
+                        st.error(f" Erreur : {str(e)}")
 
         st.divider()
 
         # Contrôles d'étape (dans le panneau Info)
         if step == "charger":
-            st.subheader("📁 Charger")
+            st.subheader(" Charger")
             source = st.radio(
                 "Source",
-                ["📂 Local (dossier datasets)", "⬆️ Upload"],
+                [" Local (dossier datasets)", "⬆ Upload"],
                 key="source_info"
             )
 
             datasets_dir = Path(__file__).parent.parent / "datasets"
-            if source.startswith("📂"):
+            if source.startswith(""):
                 supported = {'.csv', '.tsv', '.txt', '.xlsx', '.xls', '.parquet', '.json'}
                 local_files = []
                 if datasets_dir.exists():
@@ -1007,11 +1007,11 @@ def main():
                 local_files = sorted(local_files, key=lambda p: str(p).lower())
 
                 if not local_files:
-                    st.warning("⚠️ Aucun dataset trouvé")
+                    st.warning(" Aucun dataset trouvé")
                 else:
                     options = [str(p.relative_to(datasets_dir)) for p in local_files]
                     selected = st.selectbox("Fichier", options, key="local_file_info")
-                    if st.button("✅ Charger", type="primary", use_container_width=True, key="load_local_info"):
+                    if st.button(" Charger", type="primary", use_container_width=True, key="load_local_info"):
                         try:
                             df = _load_tabular_from_path(datasets_dir / selected)
                             st.session_state.dataset = df
@@ -1024,7 +1024,7 @@ def main():
                             )
                             st.rerun()
                         except Exception as e:
-                            st.error(f"❌ {str(e)}")
+                            st.error(f" {str(e)}")
             else:
                 uploaded_file = st.file_uploader(
                     "Fichier",
@@ -1073,12 +1073,12 @@ def main():
                         )
                         st.rerun()
                     except Exception as e:
-                        st.error(f"❌ {str(e)}")
+                        st.error(f" {str(e)}")
 
         elif step == "cible":
-            st.subheader("🎯 Cible")
+            st.subheader(" Cible")
             if st.session_state.get('dataset') is None:
-                st.warning("⚠️ Chargez un dataset")
+                st.warning(" Chargez un dataset")
             else:
                 df = st.session_state.dataset
                 current_target = st.session_state.get('target_column')
@@ -1105,9 +1105,9 @@ def main():
                     st.rerun()
 
         elif step == "resultats":
-            st.subheader("📈 Résultats")
+            st.subheader(" Résultats")
             if st.session_state.get('evaluation') is None or st.session_state.get('selection_result') is None:
-                st.warning("⚠️ Aucun résultat pour l’instant. Lancez AutoML.")
+                st.warning(" Aucun résultat pour l’instant. Lancez AutoML.")
             else:
                 evaluation = st.session_state.evaluation
                 selection_result = st.session_state.selection_result
@@ -1116,12 +1116,12 @@ def main():
                 task_type = st.session_state.get('task_type')
                 analysis = st.session_state.get('analysis')
 
-                st.markdown("**🏆 Meilleur modèle**")
+                st.markdown("** Meilleur modèle**")
                 st.success(f"{selection_result.get('best_model_name', 'N/A')} — score : {selection_result.get('best_score', 0):.4f}")
 
                 comparison_df = selection_result.get('comparison_summary') if isinstance(selection_result, dict) else None
                 if comparison_df is not None:
-                    st.markdown("**📌 Comparaison des modèles**")
+                    st.markdown("** Comparaison des modèles**")
                     st.dataframe(comparison_df, use_container_width=True)
                     insight = _commentaire_comparaison_modeles(comparison_df)
                     if insight:
@@ -1134,7 +1134,7 @@ def main():
 
                 metrics_df = create_metrics_table(evaluation, task_type)
                 if metrics_df is not None:
-                    st.markdown("**📊 Métriques**")
+                    st.markdown("** Métriques**")
                     st.dataframe(metrics_df, use_container_width=True)
                     metrics_insight = _commentaire_train_test(evaluation, task_type)
                     if metrics_insight:
@@ -1142,12 +1142,12 @@ def main():
 
                 train_test_plot = plot_train_test_comparison(evaluation, task_type)
                 if train_test_plot:
-                    st.markdown("**📉 Entraînement vs Test**")
+                    st.markdown("** Entraînement vs Test**")
                     st.plotly_chart(train_test_plot, use_container_width=True)
 
                 if task_type == 'classification':
                     if evaluation.get('confusion_matrix'):
-                        st.markdown("**🔍 Matrice de confusion**")
+                        st.markdown("** Matrice de confusion**")
                         cm_plot = plot_confusion_matrix(evaluation['confusion_matrix'])
                         if cm_plot:
                             st.plotly_chart(cm_plot, use_container_width=True)
@@ -1156,7 +1156,7 @@ def main():
                             st.caption(cm_insight)
 
                     if evaluation.get('classification_report'):
-                        st.markdown("**🧾 Rapport de classification**")
+                        st.markdown("** Rapport de classification**")
                         try:
                             report_df = pd.DataFrame(evaluation['classification_report']).T
                             st.dataframe(report_df, use_container_width=True)
@@ -1174,7 +1174,7 @@ def main():
                         if feature_names is not None:
                             feature_importance = evaluator.get_feature_importance(selection_result['best_model'], feature_names)
                             if feature_importance:
-                                st.markdown("**🧠 Importance des variables**")
+                                st.markdown("** Importance des variables**")
                                 importance_plot = plot_feature_importance(feature_importance)
                                 if importance_plot:
                                     st.plotly_chart(importance_plot, use_container_width=True)
@@ -1186,7 +1186,7 @@ def main():
 
                 if df is not None and target_col is not None and target_col in df.columns and task_type is not None:
                     st.divider()
-                    st.markdown("**🗂️ Rappel dataset**")
+                    st.markdown("** Rappel dataset**")
                     st.caption(f"{df.shape[0]:,} lignes × {df.shape[1]} colonnes — cible : `{target_col}`")
                     try:
                         st.plotly_chart(plot_target_distribution(df[target_col], task_type), use_container_width=True)
@@ -1229,7 +1229,7 @@ def main():
                     "2) Choisir la colonne cible\n"
                     "3) Lancer AutoML\n"
                     "4) Lire les résultats\n\n"
-                    "Cliquez sur **📁 Charger** dans le panneau Info pour commencer."
+                    "Cliquez sur ** Charger** dans le panneau Info pour commencer."
                 ),
                 content_type="text"
             )
@@ -1278,7 +1278,7 @@ def run_automl():
                 st.session_state.task_type = task_type
 
         intro_text = (
-            "# 🧾 Pré-analyse du dataset\n\n"
+            "#  Pré-analyse du dataset\n\n"
             f"**Fichier** : {st.session_state.get('current_file_name', 'N/A')}\n\n"
             f"**Dimensions** : {df.shape[0]:,} lignes × {df.shape[1]} colonnes\n\n"
             f"**Colonne cible** : `{target_col}`\n\n"
@@ -1325,7 +1325,7 @@ def run_automl():
     # ÉTAPE 1 : PREPROCESSING
     # ============================================
     add_message("assistant",
-        "<div style=\"font-size:1.35rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\">🔧 Étape 1/6 — Prétraitement des données</div>"
+        "<div style=\"font-size:1.35rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\"> Étape 1/6 — Prétraitement des données</div>"
         "<div style=\"margin:0 0 0.5rem 0;\"><b>Objectif</b> : préparer les données pour l'entraînement</div>"
         "<div><b>Traitement en cours...</b></div>",
         content_type="progress",
@@ -1352,7 +1352,7 @@ def run_automl():
         st.session_state.preprocessing_summary = preprocessing_summary
         st.session_state.split_summary = split_summary
         preprocessing_text = (
-            "### ✅ Prétraitement terminé\n\n"
+            "###  Prétraitement terminé\n\n"
             "**Ce qui a été fait :**\n"
             "- séparation X / y\n"
             "- imputation valeurs manquantes\n"
@@ -1374,7 +1374,7 @@ def run_automl():
         pass
 
     add_message("assistant",
-        f"### ✅ Prétraitement terminé !\n\n"
+        f"###  Prétraitement terminé !\n\n"
         f"**Dimensions** : {X.shape[1]} variable(s) → {X_transformed.shape[1]} après transformation\n"
         f"**Entraînement/Test** : {X_train.shape[0]}/{X_test.shape[0]} échantillons\n\n"
         f"{_commentaire_dimensions(X, X_transformed)}\n"
@@ -1386,7 +1386,7 @@ def run_automl():
     # ============================================
     if task_type == 'classification':
         add_message("assistant",
-            "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\">⚖️ Étape 2/6 — Équilibrage des classes</div>"
+            "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\"> Étape 2/6 — Équilibrage des classes</div>"
             "<div style=\"margin:0 0 0.5rem 0;\"><b>Objectif</b> : détecter et corriger le déséquilibre</div>"
             "<div><b>Analyse en cours...</b></div>",
             content_type="progress",
@@ -1416,7 +1416,7 @@ def run_automl():
             st.session_state.y_train = y_train
             strategy_requested = getattr(cfg, "RESAMPLING_STRATEGY", "auto")
             add_message("assistant",
-                "### ⚠️ Déséquilibre corrigé\n\n"
+                "###  Déséquilibre corrigé\n\n"
                 f"**Avant** : {dist_info['max_proportion']*100:.1f}% majoritaire\n"
                 f"**Après** : Classes équilibrées\n\n"
                 f"**Méthode utilisée** : `{resampling_method or 'inconnue'}` (stratégie demandée : `{strategy_requested}`)\n\n"
@@ -1425,7 +1425,7 @@ def run_automl():
                 "Ce que j’ai trouvé : la distribution de la cible était déséquilibrée et a été corrigée pour stabiliser l’entraînement.",
                 content_type="mixed",
                 text=(
-                    "### ⚠️ Déséquilibre corrigé\n\n"
+                    "###  Déséquilibre corrigé\n\n"
                     f"**Avant** : {dist_info['max_proportion']*100:.1f}% majoritaire\n"
                     f"**Après** : Classes équilibrées\n\n"
                     f"**Méthode utilisée** : `{resampling_method or 'inconnue'}` (stratégie demandée : `{strategy_requested}`)\n\n"
@@ -1437,7 +1437,7 @@ def run_automl():
             )
         else:
             add_message("assistant",
-                "### ✅ Classes équilibrées\n\n"
+                "###  Classes équilibrées\n\n"
                 "Aucun rééchantillonnage nécessaire."
             )
 
@@ -1445,7 +1445,7 @@ def run_automl():
     # ÉTAPE 3 : RECHERCHE DE MODÈLES
     # ============================================
     add_message("assistant",
-        "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\">🔍 Étape 3/6 — Recherche de modèles</div>"
+        "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\"> Étape 3/6 — Recherche de modèles</div>"
         "<div style=\"margin:0 0 0.5rem 0;\"><b>Objectif</b> : tester plusieurs modèles et hyperparamètres</div>"
         "<div><b>Recherche en cours...</b></div>",
         content_type="progress",
@@ -1463,7 +1463,7 @@ def run_automl():
     st.session_state.search_results = search_results
 
     add_message("assistant",
-        f"### ✅ Recherche terminée !\n\n"
+        f"###  Recherche terminée !\n\n"
         f"**{len(search_results)} modèles** testés\n"
         f"**Meilleur score** : {max(r['best_score'] for r in search_results):.4f}\n\n"
         "Ce que j’ai trouvé : on compare plusieurs familles de modèles et on retient ceux qui obtiennent les meilleurs scores en validation."
@@ -1473,7 +1473,7 @@ def run_automl():
     # ÉTAPE 4 : SÉLECTION DU MEILLEUR MODÈLE
     # ============================================
     add_message("assistant",
-        "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\">🏆 Étape 4/6 — Sélection du meilleur modèle</div>"
+        "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\"> Étape 4/6 — Sélection du meilleur modèle</div>"
         "<div style=\"margin:0 0 0.5rem 0;\"><b>Objectif</b> : choisir le modèle le plus performant</div>"
         "<div><b>Sélection en cours...</b></div>",
         content_type="progress",
@@ -1493,7 +1493,7 @@ def run_automl():
             score_col = 'Best Score' if 'Best Score' in comparison_df.columns else comparison_df.columns[1]
             comparison_plot = plot_model_comparison(comparison_df, score_col)
             selection_text = (
-                "### 🏆 Modèle sélectionné\n\n"
+                "###  Modèle sélectionné\n\n"
                 f"**{selection_result['best_model_name']}**\n\n"
                 f"**Score** : {selection_result['best_score']:.4f}\n\n"
                 "Tableau et graphique de comparaison ci-dessous.\n\n"
@@ -1511,7 +1511,7 @@ def run_automl():
         pass
 
     add_message("assistant",
-        f"### 🏆 Modèle sélectionné !\n\n"
+        f"###  Modèle sélectionné !\n\n"
         f"**{selection_result['best_model_name']}**\n"
         f"**Score** : {selection_result['best_score']:.4f}"
     )
@@ -1520,7 +1520,7 @@ def run_automl():
     # ÉTAPE 5 : ÉVALUATION FINALE
     # ============================================
     add_message("assistant",
-        "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\">📊 Étape 5/6 — Évaluation finale</div>"
+        "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\"> Étape 5/6 — Évaluation finale</div>"
         "<div style=\"margin:0 0 0.5rem 0;\"><b>Objectif</b> : évaluer le modèle sur les données de test</div>"
         "<div><b>Évaluation en cours...</b></div>",
         content_type="progress",
@@ -1547,7 +1547,7 @@ def run_automl():
                 plots.append(cm_plot)
 
         eval_text = (
-            "### 📊 Évaluation terminée\n\n"
+            "###  Évaluation terminée\n\n"
             "**Ce que nous vérifions :**\n"
             "- métriques sur Entraînement et Test\n"
             "- écart Entraînement/Test (sur-apprentissage / sous-apprentissage)\n"
@@ -1567,7 +1567,7 @@ def run_automl():
         pass
 
     add_message("assistant",
-        "### 📊 Évaluation terminée !\n\n"
+        "###  Évaluation terminée !\n\n"
         "Résultats disponibles dans l'onglet **Résultats**."
     )
 
@@ -1575,7 +1575,7 @@ def run_automl():
     # ÉTAPE 6 : EXPLICATIONS
     # ============================================
     add_message("assistant",
-        "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\">💬 Étape 6/6 — Explications</div>"
+        "<div style=\"font-size:1.6rem;font-weight:800;margin:0.25rem 0 0.5rem 0;\"> Étape 6/6 — Explications</div>"
         "<div style=\"margin:0 0 0.5rem 0;\"><b>Objectif</b> : générer des explications en langage naturel</div>"
         "<div><b>Analyse en cours...</b></div>",
         content_type="progress",
@@ -1596,10 +1596,10 @@ def run_automl():
         suggestions = ""
 
     add_message("assistant",
-        f"### 💡 Explication du modèle\n\n{explanation}\n\n{suggestions}"
+        f"###  Explication du modèle\n\n{explanation}\n\n{suggestions}"
     )
 
-    st.success("✅ **Pipeline AutoML terminé avec succès !**")
+    st.success(" **Pipeline AutoML terminé avec succès !**")
 
 
 if __name__ == "__main__":
