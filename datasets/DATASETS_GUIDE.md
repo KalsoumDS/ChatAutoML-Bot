@@ -1,6 +1,6 @@
 # Guide d'utilisation des Datasets
 
-## 📊 Datasets disponibles et colonnes cibles
+##  Datasets disponibles et colonnes cibles
 
 ### Classification
 
@@ -78,7 +78,7 @@
 - **Taille** : 200 lignes, 4 colonnes
 - **Note** : Parfait pour tester rapidement
 
-## 🚀 Utilisation dans ChatAutoML-Bot
+##  Utilisation dans ChatAutoML-Bot
 
 1. **Lancer l'application** :
    ```bash
@@ -86,26 +86,26 @@
    ```
 
 2. **Charger un dataset** :
-   - Cliquez sur "📁 Charger un Dataset" dans la sidebar
+   - Cliquez sur " Charger un Dataset" dans la sidebar
    - Naviguez vers le dossier `datasets/`
    - Sélectionnez un fichier CSV
 
 3. **Sélectionner la colonne cible** :
-   - Utilisez le menu déroulant "🎯 Colonne Cible"
+   - Utilisez le menu déroulant " Colonne Cible"
    - Choisissez la colonne appropriée selon le guide ci-dessus
 
 4. **Lancer AutoML** :
    - Le système détectera automatiquement le type de tâche
-   - Cliquez sur "🚀 Lancer AutoML" pour démarrer
+   - Cliquez sur " Lancer AutoML" pour démarrer
 
-## 💡 Conseils
+##  Conseils
 
 - **Pour débuter** : Utilisez `iris.csv` ou `sample_binary_classification.csv` (petits datasets, rapides)
 - **Pour tester le déséquilibre** : Utilisez `bank_marketing.csv`
 - **Pour la régression** : Utilisez `california_housing.csv` ou `wine_quality_red.csv`
 - **Pour des données réelles** : Utilisez `titanic.csv` (très populaire en ML)
 
-## 📝 Notes importantes
+##  Notes importantes
 
 - Certains datasets peuvent avoir des valeurs manquantes (ex: Titanic)
 - Les datasets d'étudiants ont plusieurs colonnes de notes (G1, G2, G3) - utilisez G3 comme cible
