@@ -2,7 +2,7 @@
 
 Ce dossier contient les jeux de données de référence pour tester ChatAutoML-Bot.
 
-## 📥 Téléchargement automatique
+##  Téléchargement automatique
 
 Pour télécharger automatiquement tous les datasets :
 
@@ -10,7 +10,7 @@ Pour télécharger automatiquement tous les datasets :
 python datasets/download_datasets.py
 ```
 
-## 📊 Jeux de Données Disponibles
+##  Jeux de Données Disponibles
 
 ### Classification
 
@@ -57,7 +57,7 @@ python datasets/download_datasets.py
 - **sample_binary_classification.csv** - Dataset simple pour tests de classification
 - **sample_regression.csv** - Dataset simple pour tests de régression
 
-## 💻 Utilisation
+##  Utilisation
 
 1. **Télécharger les datasets** :
    ```bash
@@ -71,13 +71,13 @@ python datasets/download_datasets.py
    - Sélectionnez un fichier CSV
    - Choisissez la colonne cible appropriée
 
-## 📝 Notes
+##  Notes
 
 - Certains datasets peuvent nécessiter un téléchargement manuel si les liens automatiques ne fonctionnent pas
 - Les datasets sont téléchargés au format CSV pour faciliter l'utilisation
 - Les fichiers sont sauvegardés dans ce dossier (`datasets/`)
 
-## 🔗 Liens de téléchargement manuel
+##  Liens de téléchargement manuel
 
 Si le script automatique ne fonctionne pas, vous pouvez télécharger manuellement :
 
