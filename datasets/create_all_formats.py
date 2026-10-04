@@ -17,7 +17,7 @@ def create_all_formats():
     datasets_dir = Path(__file__).parent
     
     # 1. Classification binaire équilibrée
-    print("\n📊 Création : Classification binaire équilibrée")
+    print("\n Création : Classification binaire équilibrée")
     np.random.seed(42)
     n_samples = 200
     X1 = np.random.randn(n_samples, 2) + np.array([2, 2])
@@ -32,7 +32,7 @@ def create_all_formats():
     save_all_formats(df_binary, 'binary_classification', datasets_dir)
     
     # 2. Classification multiclasse
-    print("\n📊 Création : Classification multiclasse")
+    print("\n Création : Classification multiclasse")
     np.random.seed(42)
     n_samples = 150
     X1 = np.random.randn(n_samples, 2) + np.array([2, 2])
@@ -48,7 +48,7 @@ def create_all_formats():
     save_all_formats(df_multiclass, 'multiclass_classification', datasets_dir)
     
     # 3. Régression
-    print("\n📊 Création : Régression")
+    print("\n Création : Régression")
     np.random.seed(42)
     n_samples = 200
     X = np.random.randn(n_samples, 3)
@@ -60,7 +60,7 @@ def create_all_formats():
     save_all_formats(df_regression, 'regression', datasets_dir)
     
     # 4. Avec valeurs manquantes
-    print("\n📊 Création : Avec valeurs manquantes")
+    print("\n Création : Avec valeurs manquantes")
     np.random.seed(42)
     n_samples = 300
     X = np.random.randn(n_samples, 4)
@@ -79,7 +79,7 @@ def create_all_formats():
     save_all_formats(df_missing, 'with_missing_values', datasets_dir)
     
     # 5. Features mixtes (numériques + catégorielles)
-    print("\n📊 Création : Features mixtes")
+    print("\n Création : Features mixtes")
     np.random.seed(42)
     n_samples = 250
     X_num = np.random.randn(n_samples, 2)
@@ -94,7 +94,7 @@ def create_all_formats():
     save_all_formats(df_mixed, 'mixed_features', datasets_dir)
     
     # 6. Classification déséquilibrée
-    print("\n📊 Création : Classification déséquilibrée")
+    print("\n Création : Classification déséquilibrée")
     np.random.seed(42)
     n_samples_majority = 800
     n_samples_minority = 50
@@ -110,7 +110,7 @@ def create_all_formats():
     save_all_formats(df_imbalanced, 'imbalanced_binary', datasets_dir)
     
     # 7. Dataset petit (pour tests rapides)
-    print("\n📊 Création : Dataset petit")
+    print("\n Création : Dataset petit")
     np.random.seed(42)
     n_samples = 50
     X = np.random.randn(n_samples, 2)
@@ -123,7 +123,7 @@ def create_all_formats():
     save_all_formats(df_small, 'small', datasets_dir)
     
     # 8. Charger les datasets réels existants et les convertir
-    print("\n📊 Conversion des datasets réels existants")
+    print("\n Conversion des datasets réels existants")
     
     # Iris
     if (datasets_dir / 'iris.csv').exists():
@@ -141,14 +141,14 @@ def create_all_formats():
             save_all_formats(df_titanic, 'titanic', datasets_dir)
     
     print("\n" + "=" * 60)
-    print("✅ Tous les formats ont été créés avec succès !")
+    print(" Tous les formats ont été créés avec succès !")
     print("=" * 60)
     print("\nFormats disponibles pour chaque dataset :")
     print("  - CSV (.csv)")
     print("  - Excel (.xlsx)")
     print("  - Parquet (.parquet)")
     print("  - JSON (.json)")
-    print("\n📁 Tous les fichiers sont dans le dossier 'datasets/'")
+    print("\n Tous les fichiers sont dans le dossier 'datasets/'")
 
 
 def save_all_formats(df: pd.DataFrame, name: str, datasets_dir: Path):
@@ -157,22 +157,22 @@ def save_all_formats(df: pd.DataFrame, name: str, datasets_dir: Path):
     # 1. CSV
     csv_path = datasets_dir / f"{name}.csv"
     df.to_csv(csv_path, index=False)
-    print(f"  ✓ CSV créé : {csv_path.name}")
+    print(f"   CSV créé : {csv_path.name}")
     
     # 2. Excel (.xlsx)
     try:
         xlsx_path = datasets_dir / f"{name}.xlsx"
         df.to_excel(xlsx_path, index=False, engine='openpyxl')
-        print(f"  ✓ Excel (.xlsx) créé : {xlsx_path.name}")
+        print(f"   Excel (.xlsx) créé : {xlsx_path.name}")
     except Exception as e:
-        print(f"  ✗ Excel (.xlsx) : {e}")
+        print(f"   Excel (.xlsx) : {e}")
     
     # 3. Excel (.xls) - format ancien
     try:
         xls_path = datasets_dir / f"{name}.xls"
         # Note: .xls nécessite xlwt, mais on peut créer un .xlsx et le renommer
         # Pour simplifier, on skip .xls car c'est un format obsolète
-        print(f"  ⚠ Excel (.xls) : Format obsolète, utilisez .xlsx")
+        print(f"   Excel (.xls) : Format obsolète, utilisez .xlsx")
     except Exception as e:
         pass
     
@@ -180,9 +180,9 @@ def save_all_formats(df: pd.DataFrame, name: str, datasets_dir: Path):
     try:
         parquet_path = datasets_dir / f"{name}.parquet"
         df.to_parquet(parquet_path, index=False, engine='pyarrow')
-        print(f"  ✓ Parquet créé : {parquet_path.name}")
+        print(f"   Parquet créé : {parquet_path.name}")
     except Exception as e:
-        print(f"  ✗ Parquet : {e}")
+        print(f"   Parquet : {e}")
     
     # 5. JSON tabulaire (liste de dictionnaires)
     try:
@@ -191,9 +191,9 @@ def save_all_formats(df: pd.DataFrame, name: str, datasets_dir: Path):
         json_data = df.to_dict('records')
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(json_data, f, indent=2, ensure_ascii=False, default=str)
-        print(f"  ✓ JSON créé : {json_path.name}")
+        print(f"   JSON créé : {json_path.name}")
     except Exception as e:
-        print(f"  ✗ JSON : {e}")
+        print(f"   JSON : {e}")
 
 
 if __name__ == "__main__":
