@@ -139,7 +139,7 @@ def _comment_block(comment: str) -> str:
         "<div style='margin:-0.35rem 0 0.75rem 0;padding:0.7rem 1rem;"
         "border-radius:14px;border:1px dashed rgba(255,255,255,0.12);"
         "background:rgba(255,255,255,0.02);'>"
-        "<div style='font-weight:900;margin-bottom:0.25rem'>📝 Commentaire</div>"
+        "<div style='font-weight:900;margin-bottom:0.25rem'> Commentaire</div>"
         f"<div style='opacity:.92'>{comment}</div>"
         "</div>"
     )
@@ -250,7 +250,7 @@ def _load_tabular_data(source: io.BytesIO, filename: str) -> pd.DataFrame:
 
 def display_chat():
     for msg in st.session_state.messages:
-        avatar = CHATBOT_ICON if msg["role"] == "assistant" and CHATBOT_ICON else "👤"
+        avatar = CHATBOT_ICON if msg["role"] == "assistant" and CHATBOT_ICON else ""
         with st.chat_message(msg["role"], avatar=avatar):
             content = msg.get("content")
             if msg.get("content_type", "text") == "text":
@@ -278,7 +278,7 @@ def display_chat():
 def perform_analysis():
     df = st.session_state.dataset
     target = st.session_state.target_column
-    add_message("assistant", _step_banner(1, 6, "🔎 Analyse initiale du dataset",
+    add_message("assistant", _step_banner(1, 6, " Analyse initiale du dataset",
         "Objectif : comprendre la structure (taille, valeurs manquantes, statistiques, cible)."))
 
     try:
@@ -325,7 +325,7 @@ def perform_analysis():
     )
 
     add_message("assistant", content={
-        "text": _findings_block("📌 Résumé dataset", [
+        "text": _findings_block(" Résumé dataset", [
             shape_result,
             f"Valeurs manquantes total: <b>{missing_total}</b> (≈ <b>{missing_pct_total:.2f}%</b>)" if missing_total is not None and missing_pct_total is not None else "Valeurs manquantes calculées.",
             f"Lignes dupliquées: <b>{dup_count}</b>" if dup_count is not None else "Doublons calculés.",
@@ -392,7 +392,7 @@ def perform_analysis():
             + ", ".join([f"<code>{c}</code>" for c in suspected_numeric_text_cols]))
 
     add_message("assistant", content={
-        "text": _findings_block("📌 Aperçu des données (head)", head_result_lines if head_result_lines else ["Aperçu généré."])
+        "text": _findings_block(" Aperçu des données (head)", head_result_lines if head_result_lines else ["Aperçu généré."])
             + _comment_block(("Colonnes suspectes num-en-texte détectées : " + ", ".join(suspected_numeric_text_cols))
                 if suspected_numeric_text_cols else "Aucune colonne num-en-texte détectée sur l'échantillon analysé."),
         "dataframes": [head_df],
@@ -413,7 +413,7 @@ def perform_analysis():
         stats_extra_comment = ""
 
     add_message("assistant", content={
-        "text": _findings_block("📊 Statistiques descriptives", [
+        "text": _findings_block(" Statistiques descriptives", [
             "Résumé statistique des colonnes numériques (table ci-dessous).",
             f"Numériques : <b>{len(numeric_cols)}</b> — Catégorielles/texte : <b>{len(cat_cols)}</b>.",
         ]) + _comment_block((stats_extra_comment + " " if stats_extra_comment else "")
@@ -439,7 +439,7 @@ def perform_analysis():
         missing_df = create_missing_values_table(df)
 
     add_message("assistant", content={
-        "text": _findings_block("🧩 Valeurs manquantes", [
+        "text": _findings_block(" Valeurs manquantes", [
             "df.isnull().sum() + % par colonne (table ci-dessous) + graphique.", miss_comment,
         ]) + _comment_block("Imputation prévue : numériques→médiane, catégorielles→'Unknown', bool→mode."),
         "dataframes": [missing_df],
@@ -479,7 +479,7 @@ def perform_analysis():
             tgt_specific_comment = ""
 
         add_message("assistant", content={
-            "text": _findings_block(f"🎯 Distribution de la cible ({target})", [tgt_comment])
+            "text": _findings_block(f" Distribution de la cible ({target})", [tgt_comment])
                 + _comment_block(tgt_specific_comment or "Distribution calculée (voir table + graphe)."),
             "dataframes": [target_counts_df] if target_counts_df is not None else [],
             "plots": [target_dist_plot] if target_dist_plot is not None else [],
@@ -491,7 +491,7 @@ def perform_analysis():
 def perform_preprocessing():
     df = st.session_state.dataset
     target_col = st.session_state.target_column
-    add_message("assistant", _step_banner(2, 6, "🧼 Prétraitement (nettoyage + encodage + scaling)",
+    add_message("assistant", _step_banner(2, 6, " Prétraitement (nettoyage + encodage + scaling)",
         "Objectif : convertir le dataset en matrice numérique propre, prête pour l'entraînement."))
 
     preprocessor = Preprocessor(test_size=cfg.TEST_SIZE, random_state=cfg.RANDOM_STATE)
@@ -507,7 +507,7 @@ def perform_preprocessing():
         diag_result = "Types de colonnes détectés automatiquement."
 
     add_message("assistant", content={
-        "text": _findings_block("🔎 Diagnostic des colonnes", [
+        "text": _findings_block(" Diagnostic des colonnes", [
             diag_result, "Traitement appliqué : num (imputation+scaling), cat (imputation+onehot), bool (imputation).",
         ]) + _comment_block("On prépare une matrice 100% numérique et sans NaN pour que tous les modèles puissent s'entraîner correctement."),
     }, content_type="mixed")
@@ -704,7 +704,7 @@ def perform_automl():
                     st.session_state.model_comparison_df = comparison_df
                     comp_plot = plot_model_comparison(comparison_df, metric='Best Score')
                     add_message("assistant", content={
-                        "text": _findings_block("📋 Comparaison des modèles", [
+                        "text": _findings_block(" Comparaison des modèles", [
                             "Tableau + graphique des scores (validation croisée).",
                         ]) + _comment_block(model_comment or "Comparer Best Score + temps + stabilité."),
                         "dataframes": [comparison_df],
@@ -713,7 +713,7 @@ def perform_automl():
             except Exception:
                 pass
 
-            status.write("📊 Évaluation finale...")
+            status.write(" Évaluation finale...")
             evaluator = ModelEvaluator(task_type=task_type)
             evaluation = evaluator.evaluate_model(selection_result['best_model'], X_train, y_train, X_test, y_test, metric)
             st.session_state.evaluation = evaluation
@@ -779,7 +779,7 @@ def perform_automl():
                     task_type=task_type,
                 )
                 add_message("assistant", content={
-                    "text": _findings_block("🧾 Résumé global AutoML", ["Rapport complet ci-dessous."]),
+                    "text": _findings_block(" Résumé global AutoML", ["Rapport complet ci-dessous."]),
                     "markdown": summary_md,
                 }, content_type="mixed")
             except Exception:
@@ -836,11 +836,11 @@ def main():
                 if selected_target != "-- Sélectionner --" and selected_target != st.session_state.get('target_column'):
                     st.session_state.target_column = selected_target
                     st.session_state.task_type = DataLoader().detect_task_type(df, selected_target)
-                    add_message("assistant", f"🎯 Cible : `{selected_target}` (Tâche : {st.session_state.task_type}).")
+                    add_message("assistant", f" Cible : `{selected_target}` (Tâche : {st.session_state.task_type}).")
                     st.rerun()
 
                 if st.session_state.get('target_column') and not analysis_done:
-                    if st.button("🔍 Analyser le Dataset", use_container_width=True, type="primary"):
+                    if st.button(" Analyser le Dataset", use_container_width=True, type="primary"):
                         perform_analysis()
                         st.rerun()
             if analysis_done:
@@ -849,7 +849,7 @@ def main():
         if analysis_done:
             with st.expander("3. Prétraitement", expanded=analysis_done and not preprocessing_done):
                 if not preprocessing_done:
-                    if st.button("🔧 Lancer le Prétraitement", use_container_width=True, type="primary"):
+                    if st.button(" Lancer le Prétraitement", use_container_width=True, type="primary"):
                         perform_preprocessing()
                         st.rerun()
             if preprocessing_done:
@@ -858,14 +858,14 @@ def main():
         if preprocessing_done:
             with st.expander("4. Lancer AutoML", expanded=preprocessing_done and not automl_done):
                 if not automl_done:
-                    if st.button("🚀 Lancer l'AutoML", use_container_width=True, type="primary"):
+                    if st.button(" Lancer l'AutoML", use_container_width=True, type="primary"):
                         perform_automl()
                         st.rerun()
             if automl_done:
                 st.success("AutoML terminé.")
 
         st.divider()
-        if st.button("🔄 Recommencer", use_container_width=True):
+        if st.button(" Recommencer", use_container_width=True):
             initialize_session()
             st.rerun()
 
