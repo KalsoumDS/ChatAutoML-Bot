@@ -469,7 +469,7 @@ def main():
             target_column = st.session_state.get('target_column')
             if dataset is not None and (not hasattr(dataset, "empty") or not dataset.empty) and target_column:
                 if st.button(" Lancer AutoML", use_container_width=True, type="primary"):
-                    with st.spinner("⏳ Pipeline AutoML en cours..."):
+                    with st.spinner(" Pipeline AutoML en cours..."):
                         run_automl()
                         st.rerun()
 
@@ -659,7 +659,7 @@ def main():
                     st.info("Dataset + cible requis")
                 else:
                     if st.button(" Lancer AutoML", use_container_width=True, type="primary"):
-                        with st.spinner("⏳ Pipeline AutoML en cours..."):
+                        with st.spinner(" Pipeline AutoML en cours..."):
                             try:
                                 run_automl()
                                 st.session_state.main_action = "Résultats"
@@ -978,8 +978,8 @@ def main():
             st.info(f" Cible : {st.session_state.get('target_column')}")
 
         if step == "automl" and st.session_state.get('dataset') is not None and st.session_state.get('target_column') is not None:
-            if st.button("▶ Lancer AutoML maintenant", type="primary", use_container_width=True):
-                with st.spinner("⏳ Pipeline AutoML en cours..."):
+            if st.button(" Lancer AutoML maintenant", type="primary", use_container_width=True):
+                with st.spinner(" Pipeline AutoML en cours..."):
                     try:
                         run_automl()
                         st.session_state.flow_step = "resultats"
