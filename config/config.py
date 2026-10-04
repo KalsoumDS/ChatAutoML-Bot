@@ -5,7 +5,7 @@ Configuration globale du projet ChatAutoML-Bot
 # Nom du chatbot (personnalisable)
 CHATBOT_NAME = "TabularAI"  # Nom du chatbot
 CHATBOT_DESCRIPTION = "Assistant intelligent pour l'AutoML sur données tabulaires"
-CHATBOT_ICON = "🚀"  # Emoji ou icône pour le chatbot
+CHATBOT_ICON = ""  # Emoji ou icône pour le chatbot
 
 # Limites de fichiers
 MAX_FILE_SIZE_MB = 100
