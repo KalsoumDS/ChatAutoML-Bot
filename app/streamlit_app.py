@@ -778,8 +778,9 @@ def perform_automl():
                     evaluation=evaluation,
                     task_type=task_type,
                 )
+                st.session_state.final_summary = summary_md
                 add_message("assistant", content={
-                    "text": _findings_block(" Résumé global AutoML", ["Rapport complet ci-dessous."]),
+                    "text": _findings_block(" Résumé global AutoML", ["Rapport complet ci-dessous. Téléchargeable depuis la barre latérale."]),
                     "markdown": summary_md,
                 }, content_type="mixed")
             except Exception:
@@ -858,11 +859,25 @@ def main():
         if preprocessing_done:
             with st.expander("4. Lancer AutoML", expanded=preprocessing_done and not automl_done):
                 if not automl_done:
+                    opt_choice = st.selectbox(
+                        "Optimisation Hyperparamètres",
+                        ["Optuna (Bayésien SOTA - 50 trials)", "RandomizedSearchCV", "GridSearchCV"],
+                        index=0
+                    )
+                    st.session_state.search_method = 'optuna' if 'Optuna' in opt_choice else ('random' if 'Random' in opt_choice else 'grid')
                     if st.button(" Lancer l'AutoML", use_container_width=True, type="primary"):
                         perform_automl()
                         st.rerun()
             if automl_done:
                 st.success("AutoML terminé.")
+                if st.session_state.get('final_summary'):
+                    st.download_button(
+                        label="📥 Télécharger le Rapport (Markdown)",
+                        data=st.session_state.final_summary,
+                        file_name=f"rapport_automl_{datetime.now().strftime('%Y%m%d_%H%M')}.md",
+                        mime="text/markdown",
+                        use_container_width=True
+                    )
 
         st.divider()
         if st.button(" Recommencer", use_container_width=True):
