@@ -3,7 +3,7 @@ Module de recherche de modèles et hyperparamètres (AutoML)
 """
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV, cross_val_score
 from typing import Dict, List, Any, Optional
 from .model_zoo import ModelZoo
 import time
@@ -18,7 +18,7 @@ class ModelSearcher:
         Args:
             cv: Nombre de folds pour la validation croisée
             scoring: Métrique principale (None = métrique par défaut)
-            search_method: 'grid' ou 'random'
+            search_method: 'optuna', 'grid' ou 'random'
             n_iter: Nombre d'itérations pour RandomizedSearchCV
         """
         self.cv = cv
@@ -81,8 +81,31 @@ class ModelSearcher:
                 # Créer le modèle de base
                 base_model = model_class()
                 
-                # Recherche d'hyperparamètres
-                if self.search_method == 'grid' and len(param_grid) > 0:
+                # Recherche d'hyperparamètres (Optuna bayésien, Grid ou Random)
+                if self.search_method == 'optuna' and len(param_grid) > 0:
+                    try:
+                        import optuna
+                        optuna.logging.set_verbosity(optuna.logging.WARNING)
+
+                        def objective(trial):
+                            trial_params = {}
+                            for p_name, p_vals in param_grid.items():
+                                if isinstance(p_vals, list):
+                                    trial_params[p_name] = trial.suggest_categorical(p_name, p_vals)
+                            candidate = model_class(**trial_params)
+                            cv_s = cross_val_score(candidate, X_train, y_train, cv=min(self.cv, 3), scoring=scoring, n_jobs=1)
+                            return float(np.mean(cv_s))
+
+                        study = optuna.create_study(direction="maximize")
+                        study.optimize(objective, n_trials=min(self.n_iter, 25), timeout=25)
+                        best_params = study.best_params
+                        best_model = model_class(**best_params)
+                        best_model.fit(X_train, y_train)
+                        best_score = float(study.best_value)
+                        search = best_model
+                    except Exception:
+                        search = RandomizedSearchCV(base_model, param_grid, cv=min(self.cv, 3), scoring=scoring, n_iter=min(self.n_iter, 10), n_jobs=1, verbose=0, random_state=42)
+                elif self.search_method == 'grid' and len(param_grid) > 0:
                     search = GridSearchCV(
                         base_model,
                         param_grid,
