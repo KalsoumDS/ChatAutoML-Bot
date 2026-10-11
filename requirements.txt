@@ -27,9 +27,8 @@ plotly>=5.17.0
 seaborn>=0.12.0
 matplotlib>=3.7.0
 
-# Ollama (recommandé pour LLM local)
-ollama>=0.1.0  # Pour utiliser Ollama localement
-# Alternative: utiliser requests si ollama n'est pas disponible
+# Ollama (local uniquement - désactivé sur Streamlit Cloud)
+# ollama>=0.1.0
 requests>=2.31.0
 
 # Optional: LLM APIs
