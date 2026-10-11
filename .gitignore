@@ -47,6 +47,9 @@ datasets/*.xlsx
 datasets/*.parquet
 datasets/*.json
 
+# Exception: demo file for buyers
+!demo_data.csv
+
 # Temporary files
 /tmp/
 *.tmp
